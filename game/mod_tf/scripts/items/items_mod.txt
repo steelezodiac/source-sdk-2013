@@ -1,0 +1,12 @@
+#base items_game.txt
+
+"items_game"
+{
+	"attributes"
+	{
+	}
+	
+	"items"
+	{
+	}
+}
