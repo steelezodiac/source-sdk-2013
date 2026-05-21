@@ -739,14 +739,6 @@ void CTFSniperRifle::SetInternalUnzoomTime( float flUnzoomTime )
 	if ( m_flUnzoomTime == flUnzoomTime )
 		return;
 
-	if ( flUnzoomTime > gpGlobals->curtime )
-	{
-		DisableJump();
-	}
-	else
-	{
-		EnableJump();
-	}
 #endif // GAME_DLL
 
 	m_flUnzoomTime = flUnzoomTime;

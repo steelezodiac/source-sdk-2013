@@ -297,7 +297,7 @@ const char *CTFFlameThrower::GetNewFlameEffectInternal( int nTeam, bool bCrit )
 			const CEconItemAttributeDefinition *pAttrDef = ( nTeam == TF_TEAM_BLUE ) ? ( bCrit ? pAttrDef_FireParticleBlueCrit : pAttrDef_FireParticleBlue ) : ( bCrit ? pAttrDef_FireParticleRedCrit : pAttrDef_FireParticleRed );
 			if ( !pItem->FindAttribute( pAttrDef, &attrModule ) || !attrModule.has_value() )
 			{
-				V_strncpy( pszParticleEffect, bCrit ? ( ( nTeam == TF_TEAM_BLUE ) ? "new_flame_crit_blue" : "new_flame_crit_red" ) : "new_flame", MAX_PARTICLE_EFFECT_NAME_LENGTH );
+				V_strncpy( pszParticleEffect, bCrit ? ( ( nTeam == TF_TEAM_BLUE ) ? "flamethrower_crit_blue" : "flamethrower_crit_red" ) : "flamethrower", MAX_PARTICLE_EFFECT_NAME_LENGTH );
 			}
 			else
 			{
@@ -306,7 +306,7 @@ const char *CTFFlameThrower::GetNewFlameEffectInternal( int nTeam, bool bCrit )
 		}
 	}
 
-	return ( pszParticleEffect[0] ? pszParticleEffect : "new_flame" );
+	return ( pszParticleEffect[0] ? pszParticleEffect : "flamethrower" );
 }
 
 //-----------------------------------------------------------------------------
@@ -2556,14 +2556,14 @@ const char* CTFFlameThrower::FlameEffectName( bool bIsFirstPersonView )
 	// Halloween Spell
 	if ( m_bHasHalloweenSpell )
 	{
-		return "flamethrower_halloween_new_flame";
+		return "flamethrower_halloween";
 	}
 
 	switch ( GetFlameThrowerMode() )
 	{
-	case TF_FLAMETHROWER_MODE_PHLOG:	return "drg_phlo_stream_new_flame";
-	case TF_FLAMETHROWER_MODE_GIANT:	return "flamethrower_giant_mvm_new_flame";
-	case TF_FLAMETHROWER_MODE_RAINBOW:	return "flamethrower_rainbow_new_flame";
+	case TF_FLAMETHROWER_MODE_PHLOG:	return "drg_phlo_stream";
+	case TF_FLAMETHROWER_MODE_GIANT:	return "flamethrower_giant_mvm";
+	case TF_FLAMETHROWER_MODE_RAINBOW:	return ( bIsFirstPersonView ? "flamethrower_rainbow_FP" : "flamethrower_rainbow" );
 	default:							
 		{
 			return GetNewFlameEffectInternal( pOwner->GetTeamNumber(), false );
@@ -2583,14 +2583,14 @@ const char* CTFFlameThrower::FlameCritEffectName( bool bIsFirstPersonView )
 	// Halloween Spell
 	if ( m_bHasHalloweenSpell )
 	{
-		return ( pOwner->GetTeamNumber() == TF_TEAM_BLUE ? "flamethrower_halloween_crit_blue_new_flame" : "flamethrower_halloween_crit_red_new_flame" );
+		return ( pOwner->GetTeamNumber() == TF_TEAM_BLUE ? "flamethrower_halloween_crit_blue" : "flamethrower_halloween_crit_red" );
 	}
 
 	switch ( GetFlameThrowerMode() )
 	{
-	case TF_FLAMETHROWER_MODE_PHLOG:	return "drg_phlo_stream_crit_new_flame";
-	case TF_FLAMETHROWER_MODE_GIANT:	return "flamethrower_crit_giant_mvm_new_flame";
-	case TF_FLAMETHROWER_MODE_RAINBOW:	return "flamethrower_rainbow_new_flame";
+	case TF_FLAMETHROWER_MODE_PHLOG:	return "drg_phlo_stream_crit";
+	case TF_FLAMETHROWER_MODE_GIANT:	return "flamethrower_crit_giant_mvm";
+	case TF_FLAMETHROWER_MODE_RAINBOW:	return ( bIsFirstPersonView ? "flamethrower_rainbow_FP" : "flamethrower_rainbow" );
 	default:
 		{
 			return GetNewFlameEffectInternal( pOwner->GetTeamNumber(), true );
