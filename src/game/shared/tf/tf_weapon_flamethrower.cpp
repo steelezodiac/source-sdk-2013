@@ -143,6 +143,8 @@ ConVar tf_airblast_cray_pitch_control( "tf_airblast_cray_pitch_control", "0", FC
 #define TF_FLAMETHROWER_HITACCURACY_MED			40.0f
 #define TF_FLAMETHROWER_HITACCURACY_HIGH		60.0f
 
+#define FLAME_ROCKET_MODEL "models/weapons/w_models/w_rocket.mdl"
+
 //-----------------------------------------------------------------------------
 
 #define TF_WEAPON_BUBBLE_WAND_MODEL		"models/player/items/pyro/mtp_bubble_wand.mdl"
@@ -984,10 +986,14 @@ void CTFFlameThrower::FireAirBlast( int iAmmoPerShot )
 #ifdef GAME_DLL
 	int nDash = 0;
 	CALL_ATTRIB_HOOK_INT( nDash, airblast_dashes );
-
+	int iProjectile = 0;
+	CALL_ATTRIB_HOOK_INT( iProjectile, override_projectile_type );
 	if ( !nDash )
 	{
-		DeflectProjectiles();
+		if ( iProjectile == TF_PROJECTILE_FLAME_ROCKET )
+		{
+			FireFlameRocket( pOwner );
+		} else DeflectProjectiles();
 	}
 	else
 	{
@@ -2775,6 +2781,39 @@ END_NETWORK_TABLE()
 #ifdef GAME_DLL
 LINK_ENTITY_TO_CLASS( tf_flame, CTFFlameEntity );
 IMPLEMENT_AUTO_LIST( ITFFlameEntityAutoList );
+
+LINK_ENTITY_TO_CLASS( tf_weapon_flamerocket, CTFFlameRocket );
+
+
+
+//-----------------------------------------------------------------------------
+// Purpose:
+//-----------------------------------------------------------------------------
+CTFFlameRocket *CTFFlameRocket::Create( CBaseEntity* pLauncher, const Vector &vecOrigin, const QAngle &vecAngles, CBaseEntity *pOwner )
+{
+	CTFFlameRocket *pRocket = static_cast<CTFFlameRocket*>( CTFBaseRocket::Create( pLauncher, "tf_weapon_flamerocket", vecOrigin, vecAngles, pOwner ) );
+
+	return pRocket;
+}
+
+void CTFFlameRocket::Spawn( void )
+{
+	BaseClass::Spawn();
+	SetModel( FLAME_ROCKET_MODEL );
+	SetDamage( TF_FLAMETHROWER_ROCKET_DAMAGE );
+	UTIL_SetSize( this, vec3_origin, vec3_origin );
+}
+
+void CTFFlameRocket::Precache( void )
+{
+	PrecacheModel( FLAME_ROCKET_MODEL );
+	PrecacheParticleSystem( "flamethrower_crit_blue" );
+	PrecacheParticleSystem( "flamethrower_blue" );
+	PrecacheParticleSystem( "flamethrower_crit_red" );
+	PrecacheParticleSystem( "flamethrower" );
+	PrecacheParticleSystem( "flamethrower_underwater" );
+	BaseClass::Precache();
+}
 
 //-----------------------------------------------------------------------------
 // Purpose:

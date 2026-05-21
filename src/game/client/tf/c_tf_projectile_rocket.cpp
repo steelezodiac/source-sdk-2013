@@ -114,6 +114,13 @@ void C_TFProjectile_Rocket::CreateTrails( void )
 						ParticleProp()->Create( "rockettrail_airstrike_line", PATTACH_POINT_FOLLOW, iAttachment );
 					}
 				}
+				int iProjectile = 0;
+				CALL_ATTRIB_HOOK_INT_ON_OTHER(GetLauncher(), iProjectile, override_projectile_type);
+				if (iProjectile == TF_PROJECTILE_FLAME_ROCKET)
+				{
+					ParticleProp()->Create("incendiaryrockettrail", PATTACH_POINT_FOLLOW, iAttachment);
+					bUsingCustom = true;
+				}
 			}
 		}
 	}

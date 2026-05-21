@@ -239,15 +239,26 @@ private:
 	CTFFlameThrower( const CTFFlameThrower & );
 };
 
+#define	TF_FLAMETHROWER_ROCKET_DAMAGE	(15)
+
 //-----------------------------------------------------------------------------
 // Flame rocket.  Not used in TF2, but is a part of data tables in demos and 
 // must live on forever.
 //-----------------------------------------------------------------------------
-class CTFFlameRocket : public CTFBaseRocket
+class CTFFlameRocket : public CTFProjectile_Rocket
 {
-	DECLARE_CLASS( CTFFlameRocket, CTFBaseRocket );
+	DECLARE_CLASS(CTFFlameRocket, CTFProjectile_Rocket);
 public:
-	DECLARE_NETWORKCLASS(); 
+	DECLARE_NETWORKCLASS();
+	virtual int		GetWeaponID(void) const { return TF_WEAPON_FLAMETHROWER_ROCKET; }
+#ifdef GAME_DLL
+	// Creation.
+	static CTFFlameRocket* Create(CBaseEntity* pLauncher, const Vector& vecOrigin, const QAngle& vecAngles, CBaseEntity* pOwner);
+	virtual void	Spawn();
+	virtual void	Precache();
+#else
+	virtual const char* GetTrailParticleName(void) { return "incendiaryrockettrail"; }
+#endif
 };
 
 #ifdef GAME_DLL

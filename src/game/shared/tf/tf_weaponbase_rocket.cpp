@@ -579,8 +579,13 @@ int CTFBaseRocket::GetStunLevel( void )
 float CTFBaseRocket::GetRadius() 
 { 
 	float flRadius = TF_ROCKET_RADIUS;
+	int iProjectile = 0;
+	CALL_ATTRIB_HOOK_FLOAT_ON_OTHER( m_hLauncher, iProjectile, override_projectile_type );
 	CALL_ATTRIB_HOOK_FLOAT_ON_OTHER( m_hLauncher, flRadius, mult_explosion_radius );
-
+	if ( iProjectile == TF_PROJECTILE_FLAME_ROCKET )
+	{
+		flRadius = TF_FLAMETHROWER_ROCKET_BURN_RADIUS;
+	}
 	CBaseEntity *pAttacker = GetOwnerPlayer();
 	if ( pAttacker )
 	{

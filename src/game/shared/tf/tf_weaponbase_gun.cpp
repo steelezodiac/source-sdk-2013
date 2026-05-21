@@ -820,6 +820,31 @@ CBaseEntity *CTFWeaponBaseGun::FireJar( CTFPlayer *pPlayer )
 //-----------------------------------------------------------------------------
 CBaseEntity *CTFWeaponBaseGun::FireFlameRocket( CTFPlayer *pPlayer )
 {
+	PlayWeaponShootSound();
+
+	// Server only - create the rocket.
+#ifdef GAME_DLL
+
+	Vector vecSrc;
+	QAngle angForward;
+	Vector vecOffset( 23.5f, 12.0f, -3.0f );
+	if ( pPlayer->GetFlags() & FL_DUCKING )
+	{
+		vecOffset.z = 8.0f;
+	}
+	GetProjectileFireSetup( pPlayer, vecOffset, &vecSrc, &angForward, false );
+
+	trace_t trace;	
+	Vector vecEye = pPlayer->EyePosition();
+	CTraceFilterSimple traceFilter( this, COLLISION_GROUP_NONE );
+	UTIL_TraceLine( vecEye, vecSrc, MASK_SOLID_BRUSHONLY, &traceFilter, &trace );
+
+	CTFFlameRocket *pProjectile = CTFFlameRocket::Create( this, trace.endpos, angForward, pPlayer );
+
+	return pProjectile;
+
+#endif
+
 	return NULL;
 }
 

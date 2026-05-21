@@ -27,7 +27,7 @@
 #define TF_FLARE_DET_RADIUS			(110)			// Special version of the flare that can be detonated by the player
 #define TF_FLARE_RADIUS_FOR_FJS		(100.0f)
 #define TF_ROCKET_DESTROYABLE_TIMER	(0.25)
-
+#define TF_FLAMETHROWER_ROCKET_BURN_RADIUS			(198)
 
 //=============================================================================
 //
@@ -124,7 +124,7 @@ public:
 	CBaseEntity		*GetLauncher( void ) { return m_hLauncher; }
 
 	virtual bool	IsDestroyable( bool bOrbAttack = false ) OVERRIDE { return ( !bOrbAttack ? ( gpGlobals->curtime > m_flDestroyableTime ) : true ); }
-
+	virtual float	GetInitialAfterburnDuration(void) const { return 7.5f; }
 	CBaseEntity		*GetOwnerPlayer( void ) const;
 
 protected:
